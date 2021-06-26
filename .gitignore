@@ -1,3 +1,13 @@
 .DS_Store
 npm-debug.log
 node_modules/
+
+.DS_Store
+GooglePlacesAutocompleteExample
+Assets
+yarn.lock
+.eslintrc
+.prettierrc
+.*ignore
+.github
+.release-it.json

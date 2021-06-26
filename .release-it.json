@@ -1,8 +1,0 @@
-{
-  "git": {
-    "requireBranch": "master"
-  },
-  "github": {
-    "release": true
-  }
-}
