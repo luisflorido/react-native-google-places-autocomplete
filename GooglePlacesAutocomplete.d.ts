@@ -372,6 +372,7 @@ interface GooglePlacesAutocompleteProps {
   currentLocationLabel?: string;
   /** debounce the requests in ms. Set to 0 to remove debounce. By default 0ms. */
   debounce?: number;
+  ignoreTypes?: Array;
   disableScroll?: boolean;
   enableHighAccuracyLocation?: boolean;
   enablePoweredByContainer?: boolean;
