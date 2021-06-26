@@ -84,7 +84,6 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
   };
 
   const buildRowsFromResults = (results) => {
-    const { ignoreTypes } = this.props;
     let res = [],
       newResults = [...results];
 
@@ -106,10 +105,10 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
       isPredefinedPlace: true,
     }));
 
-    if (newResults.length && ignoreTypes.length) {
+    if (newResults.length && props.ignoreTypes.length) {
       newResults = newResults.filter(
         (searched) =>
-          !searched?.types?.some((types) => ignoreTypes.includes(types)),
+          !searched?.types?.some((types) => props.ignoreTypes.includes(types)),
       );
     }
 
