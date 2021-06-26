@@ -84,7 +84,9 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
   };
 
   const buildRowsFromResults = (results) => {
-    let res = [];
+    const { ignoreTypes } = this.props;
+    let res = [],
+      newResults = [...results];
 
     if (results.length === 0 || props.predefinedPlacesAlwaysVisible === true) {
       res = [
@@ -104,7 +106,14 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
       isPredefinedPlace: true,
     }));
 
-    return [...res, ...results];
+    if (newResults.length && ignoreTypes.length) {
+      newResults = newResults.filter(
+        (searched) =>
+          !searched?.types?.some((types) => ignoreTypes.includes(types)),
+      );
+    }
+
+    return [...res, ...newResults];
   };
 
   const getRequestUrl = (requestUrl) => {
@@ -143,8 +152,8 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
   }, []);
   useEffect(() => {
     // Update dataSource if props.predefinedPlaces changed
-    setDataSource(buildRowsFromResults([])) 
-  }, [props.predefinedPlaces])
+    setDataSource(buildRowsFromResults([]));
+  }, [props.predefinedPlaces]);
 
   useImperativeHandle(ref, () => ({
     setAddressText: (address) => {
@@ -530,7 +539,9 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceData = useMemo(() => debounce(_request, props.debounce), [props.query]);
+  const debounceData = useMemo(() => debounce(_request, props.debounce), [
+    props.query,
+  ]);
 
   const _onChangeText = (text) => {
     setStateText(text);
@@ -832,6 +843,7 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
 });
 
 GooglePlacesAutocomplete.propTypes = {
+  ignoreTypes: PropTypes.array,
   autoFillOnNotFound: PropTypes.bool,
   currentLocation: PropTypes.bool,
   currentLocationLabel: PropTypes.string,
@@ -849,7 +861,10 @@ GooglePlacesAutocomplete.propTypes = {
   listEmptyComponent: PropTypes.func,
   listUnderlayColor: PropTypes.string,
   // Must write it this way: https://stackoverflow.com/a/54290946/7180620
-  listViewDisplayed: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf(['auto'])]),
+  listViewDisplayed: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.oneOf(['auto']),
+  ]),
   keepResultsAfterBlur: PropTypes.bool,
   minLength: PropTypes.number,
   nearbyPlacesAPI: PropTypes.string,
@@ -880,6 +895,7 @@ GooglePlacesAutocomplete.propTypes = {
 };
 
 GooglePlacesAutocomplete.defaultProps = {
+  ignoreTypes: [],
   autoFillOnNotFound: false,
   currentLocation: false,
   currentLocationLabel: 'Current location',
