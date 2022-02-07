@@ -426,6 +426,10 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
               results = responseJSON.results;
             }
 
+            if(results?.[0]?.distance_meters > 0){
+              results.sort((a, b) => a.distance_meters - b.distance_meters);
+            }
+
             setDataSource(buildRowsFromResults(results));
             // }
           }
@@ -499,6 +503,9 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
                 : responseJSON.predictions;
 
             _results = results;
+            if(results?.[0]?.distance_meters > 0){
+              results.sort((a, b) => a.distance_meters - b.distance_meters);
+            }
             setDataSource(buildRowsFromResults(results));
             // }
           }
